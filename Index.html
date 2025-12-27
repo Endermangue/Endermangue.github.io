@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<title>Daily Quotes Widget</title>
+
+<style>
+  body {
+    margin: 0;
+    padding: 14px;
+    font-family: Georgia, serif;
+    background: transparent;
+    color: #222;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .quote {
+    font-size: 18px;
+    line-height: 1.4;
+  }
+
+  .author {
+    margin-top: 8px;
+    font-size: 14px;
+    opacity: 0.7;
+    text-align: right;
+  }
+
+  .hint {
+    margin-top: 6px;
+    font-size: 11px;
+    opacity: 0.4;
+    text-align: center;
+  }
+</style>
+</head>
+
+<body>
+  <div class="quote" id="quote"></div>
+  <div class="author" id="author"></div>
+
+
+<script>
+  const quotes = [
+    { text: "La semplicità è l’ultima sofisticazione.", author: "Leonardo da Vinci" },
+    { text: "Agisci come se ciò che fai facesse la differenza.", author: "William James" },
+    { text: "Non smettere mai di iniziare.", author: "Anonimo" },
+    { text: "Siamo ciò che facciamo ripetutamente.", author: "Aristotele" },
+    { text: "Il futuro dipende da ciò che fai oggi.", author: "Gandhi" },
+    { text: "La disciplina è libertà.", author: "Jocko Willink" },
+    { text: "Fatto è meglio che perfetto.", author: "Mark Zuckerberg" },
+    { text: "La costanza batte il talento.", author: "Anonimo" }
+  ];
+
+  const todayKey = new Date().toISOString().split("T")[0];
+  const storageKey = "dailyQuotes_" + todayKey;
+
+  let dailyQuotes = JSON.parse(localStorage.getItem(storageKey));
+
+  if (!dailyQuotes) {
+    // shuffle
+    const shuffled = [...quotes].sort(() => 0.5 - Math.random());
+    dailyQuotes = shuffled.slice(0, 5);
+    localStorage.setItem(storageKey, JSON.stringify(dailyQuotes));
+  }
+
+  let index = 0;
+
+  function renderQuote() {
+    document.getElementById("quote").innerText = `"${dailyQuotes[index].text}"`;
+    document.getElementById("author").innerText = `— ${dailyQuotes[index].author}`;
+  }
+
+  document.body.addEventListener("click", () => {
+    index = (index + 1) % dailyQuotes.length;
+    renderQuote();
+  });
+
+  renderQuote();
+</script>
+</body>
+</html>
